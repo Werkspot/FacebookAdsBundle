@@ -1,0 +1,44 @@
+{
+  "name": "werkspot/facebook-ads-api-bundle",
+  "type":        "symfony-bundle",
+  "description": "A service to make API calls to Facebook ads in Symfony",
+  "keywords":    ["facebook ads", "api", "service", "bundle"],
+  "homepage":    "http://werkspot.nl",
+  "license":     "MIT",
+
+  "authors": [
+    {
+      "name": "Laurens Laman",
+      "homepage": "http://werkspot.nl"
+    },
+    {
+      "name": "Winfred Peereboom",
+      "homepage": "http://werkspot.nl"
+    }
+  ],
+  "repositories":
+  [
+    {
+      "type": "vcs",
+      "url": "git@github.com:Werkspot/apilib-general.git"
+    }
+  ],
+  "require": {
+    "php":                      ">=5.3.2",
+    "symfony/framework-bundle": "~2.3|~3.0",
+    "facebook/php-sdk-v4" : "~5.0",
+    "facebook/php-ads-sdk": "2.5.*",
+    "werkspot/apilib-general": "^0.1"
+  },
+  "require-dev": {
+    "mockery/mockery": "~0.9",
+    "phpunit/phpunit": "^5.2",
+    "symfony/phpunit-bridge": "^3.0",
+    "fabpot/php-cs-fixer": "^1.11"
+  },
+  "autoload": {
+    "psr-4" : {
+      "Werkspot\\FacebookAdsBundle\\" : ""
+    }
+  }
+}

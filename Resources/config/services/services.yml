@@ -1,0 +1,7 @@
+services:
+  werkspot.facebook_ads.client:
+    class: Werkspot\FacebookAdsBundle\Api\Client
+    arguments:
+      - "%facebook.app_id%"
+      - "%facebook.app_secret%"
+      - "%facebook.system_user_token%"

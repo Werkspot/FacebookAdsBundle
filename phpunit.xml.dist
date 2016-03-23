@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        backupGlobals               = "false"
+        backupStaticAttributes      = "false"
+        colors                      = "true"
+        convertErrorsToExceptions   = "true"
+        convertNoticesToExceptions  = "true"
+        convertWarningsToExceptions = "true"
+        processIsolation            = "false"
+        stopOnFailure               = "false"
+        syntaxCheck                 = "false"
+        bootstrap                   = "phpunit.bootstrap.php" >
+    <testsuites>
+        <testsuite name="unit">
+            <directory>./Tests/</directory>
+        </testsuite>
+    </testsuites>
+    <testsuites>
+        <testsuite name="integration">
+            <directory>./IntegrationTests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener" />
+        <listener class="\Symfony\Bridge\PhpUnit\SymfonyTestsListener">
+            <arguments>
+                <array>
+                    <element><string>Symfony\Component\HttpFoundation</string></element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./Api/Exceptions/</directory>
+        </blacklist>
+        <whitelist>
+            <directory suffix=".php">./Api/</directory>
+            <directory suffix=".php">./Model/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
