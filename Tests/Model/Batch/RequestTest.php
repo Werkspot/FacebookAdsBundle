@@ -70,6 +70,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testBody_CantSetMethodGET()
     {
         $request = $this->getNewEmptyRequest();
+        $request->setMethod(HttpMethod::get(HttpMethod::METHOD_GET));
         $request->setBody('this should not be possible');
     }
 
