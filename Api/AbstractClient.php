@@ -2,10 +2,13 @@
 
 namespace Werkspot\FacebookAdsBundle\Api;
 
+use Facebook\Facebook;
 use FacebookAds\Api;
 
 abstract class AbstractClient
 {
+    const GRAPH_VERSION = 'v2.5';
+
     /**
      * @var int
      */
@@ -38,5 +41,18 @@ abstract class AbstractClient
     protected function initApi()
     {
         Api::init($this->appId, $this->appSecret, $this->accessToken);
+    }
+
+    protected function initFacebook()
+    {
+        $facebook = new Facebook(
+            [
+                'app_id' => $this->appId,
+                'app_secret' => $this->appSecret,
+                'default_graph_version' => self::GRAPH_VERSION
+            ]
+        );
+        $facebook->setDefaultAccessToken($this->accessToken);
+        return $facebook;
     }
 }

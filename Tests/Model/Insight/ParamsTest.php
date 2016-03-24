@@ -19,9 +19,9 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testAddField(Field $field)
     {
-        $params = new Params();
-        $params->addField($field);
+        $params = $this->getNewEmptyParams();
 
+        $params->addField($field);
         $this->assertEquals(
             ['fields' => $field->getValue()],
             $params->getParamsArray()
@@ -31,9 +31,9 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testAddAllFields()
     {
         $allField = Field::getValidOptions();
-        $params = new Params();
-        $params->addAllFields();
+        $params = $this->getNewEmptyParams();
 
+        $params->addAllFields();
         $this->assertEquals(
             ['fields' => implode(', ', $allField)],
             $params->getParamsArray()
@@ -43,18 +43,18 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testAddFieldsFromString()
     {
         $oneParameter = Field::ACCOUNT_NAME;
-        $params = new Params();
-        $params->addFieldsFromString($oneParameter);
+        $params = $this->getNewEmptyParams();
 
+        $params->addFieldsFromString($oneParameter);
         $this->assertEquals(
             ['fields' => $oneParameter],
             $params->getParamsArray()
         );
 
         $twoParameter = Field::ACCOUNT_NAME . ', ' . Field::SPEND;
-        $params = new Params();
-        $params->addFieldsFromString($twoParameter);
+        $params = $this->getNewEmptyParams();
 
+        $params->addFieldsFromString($twoParameter);
         $this->assertEquals(
             ['fields' => $twoParameter],
             $params->getParamsArray()
@@ -90,8 +90,8 @@ class ParamsTest extends PHPUnit_Framework_TestCase
                 ['fields' => $parameters],
                 $params->getParamsArray()
             );
-            $params->removeField($field);
 
+            $params->removeField($field);
             $this->assertEquals(
                 ['fields' => $defaultField->getValue()],
                 $params->getParamsArray()
@@ -104,8 +104,9 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         $since = new \DateTime('-12day');
         $timeRange = new TimeRange($since);
         $params = new Params();
-        $params->setTimeRange($timeRange);
+        $this->assertEquals(['fields' => ''], $params->getParamsArray());
 
+        $params->setTimeRange($timeRange);
         $this->assertEquals(['fields' => '', 'time_range' => $timeRange->getParamsArray()], $params->getParamsArray());
     }
 
@@ -116,10 +117,11 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testDatePreset(DatePreset $datePreset)
     {
-        $params = new Params();
-        $params->setDatePreset($datePreset);
+        $params = $this->getNewEmptyParams();
 
+        $params->setDatePreset($datePreset);
         $this->assertEquals(['fields' => '', 'date_preset' => $datePreset->getValue()], $params->getParamsArray());
+        $this->assertEquals('?fields=&date_preset=' . $datePreset->getValue(), $params->getBatchQuery());
     }
 
     public function getTestDatePresetData()
@@ -140,10 +142,11 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testActionReportTime(ActionReportTime $actionReportTime)
     {
-        $params = new Params();
-        $params->setActionReportTime($actionReportTime);
+        $params = $this->getNewEmptyParams();
 
+        $params->setActionReportTime($actionReportTime);
         $this->assertEquals(['fields' => '', 'action_report_time' => $actionReportTime->getValue()], $params->getParamsArray());
+        $this->assertEquals('?fields=&action_report_time=' . $actionReportTime->getValue(), $params->getBatchQuery());
     }
 
     public function getTestActionReportTimeData()
@@ -159,14 +162,15 @@ class ParamsTest extends PHPUnit_Framework_TestCase
 
     public function testDefaultSummary()
     {
-        $params = new Params();
+        $params = $this->getNewEmptyParams();
 
         $params->setDefaultSummary(true);
-
         $this->assertEquals(['fields' => '', 'default_summary' => true], $params->getParamsArray());
+        $this->assertEquals('?fields=&default_summary=1', $params->getBatchQuery());
 
         $params->setDefaultSummary(false);
         $this->assertEquals(['fields' => '', 'default_summary' => false], $params->getParamsArray());
+        $this->assertEquals('?fields=&default_summary=', $params->getBatchQuery());
     }
 
     /**
@@ -176,10 +180,11 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testLevel(Level $level)
     {
-        $params = new Params();
-        $params->setLevel($level);
+        $params = $this->getNewEmptyParams();
 
+        $params->setLevel($level);
         $this->assertEquals(['fields' => '', 'level' => $level->getValue()], $params->getParamsArray());
+        $this->assertEquals('?fields=&level=' . $level->getValue(), $params->getBatchQuery());
     }
 
     public function getTestLevelData()
@@ -202,5 +207,16 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         }
 
         return $result;
+    }
+
+    /**
+     * @return Params
+     */
+    private function getNewEmptyParams()
+    {
+        $params = new Params();
+        $this->assertEquals('?fields=', $params->getBatchQuery());
+        $this->assertEquals(['fields' => ''], $params->getParamsArray());
+        return $params;
     }
 }
