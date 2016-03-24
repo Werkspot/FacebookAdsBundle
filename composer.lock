@@ -1639,12 +1639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Werkspot/Enum.git",
-                "reference": "d4fe3369c3609baff647a1dae5fb7e0c0d6d871e"
+                "reference": "7370d489e54abe57619017f5a023832cb74efaf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Werkspot/Enum/zipball/d4fe3369c3609baff647a1dae5fb7e0c0d6d871e",
-                "reference": "d4fe3369c3609baff647a1dae5fb7e0c0d6d871e",
+                "url": "https://api.github.com/repos/Werkspot/Enum/zipball/7370d489e54abe57619017f5a023832cb74efaf0",
+                "reference": "7370d489e54abe57619017f5a023832cb74efaf0",
                 "shasum": ""
             },
             "require": {
