@@ -12,6 +12,14 @@ use Werkspot\FacebookAdsBundle\Model\Insight\Params\TimeRange;
 
 class ParamsTest extends PHPUnit_Framework_TestCase
 {
+
+    public function testNewParamsIsEmpty()
+    {
+        $params = new Params();
+        $this->assertEquals('?fields=', $params->getBatchQuery());
+        $this->assertEquals(['fields' => ''], $params->getParamsArray());
+    }
+
     /**
      * @dataProvider getFieldEnumData
      *
@@ -19,7 +27,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testAddField(Field $field)
     {
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addField($field);
         $this->assertEquals(
@@ -31,7 +39,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testAddAllFields()
     {
         $allField = Field::getValidOptions();
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addAllFields();
         $this->assertEquals(
@@ -43,7 +51,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testAddFieldsFromString()
     {
         $oneParameter = Field::ACCOUNT_NAME;
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addFieldsFromString($oneParameter);
         $this->assertEquals(
@@ -52,7 +60,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         );
 
         $twoParameter = Field::ACCOUNT_NAME . ', ' . Field::SPEND;
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addFieldsFromString($twoParameter);
         $this->assertEquals(
@@ -117,7 +125,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testDatePreset(DatePreset $datePreset)
     {
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->setDatePreset($datePreset);
         $this->assertEquals(['fields' => '', 'date_preset' => $datePreset->getValue()], $params->getParamsArray());
@@ -142,7 +150,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testActionReportTime(ActionReportTime $actionReportTime)
     {
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->setActionReportTime($actionReportTime);
         $this->assertEquals(['fields' => '', 'action_report_time' => $actionReportTime->getValue()], $params->getParamsArray());
@@ -162,7 +170,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
 
     public function testDefaultSummary()
     {
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->setDefaultSummary(true);
         $this->assertEquals(['fields' => '', 'default_summary' => true], $params->getParamsArray());
@@ -180,7 +188,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testLevel(Level $level)
     {
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->setLevel($level);
         $this->assertEquals(['fields' => '', 'level' => $level->getValue()], $params->getParamsArray());
@@ -207,16 +215,5 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         }
 
         return $result;
-    }
-
-    /**
-     * @return Params
-     */
-    private function getNewEmptyParams()
-    {
-        $params = new Params();
-        $this->assertEquals('?fields=', $params->getBatchQuery());
-        $this->assertEquals(['fields' => ''], $params->getParamsArray());
-        return $params;
     }
 }

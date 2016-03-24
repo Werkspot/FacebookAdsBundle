@@ -7,6 +7,13 @@ use Werkspot\FacebookAdsBundle\Model\AdSet\Params;
 
 class ParamsTest extends PHPUnit_Framework_TestCase
 {
+    public function testNewParamsIsEmpty()
+    {
+        $params = new Params();
+        $this->assertEquals('?fields=', $params->getBatchQuery());
+        $this->assertEquals(['fields' => ''], $params->getParamsArray());   
+    }
+    
     /**
      * @dataProvider fieldEnumData
      *
@@ -14,7 +21,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
      */
     public function testAddField(Field $field)
     {
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addField($field);
         $this->assertEquals(
@@ -27,7 +34,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testAddAllFields()
     {
         $allField = Field::getValidOptions();
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addAllFields();
         $this->assertEquals(
@@ -39,7 +46,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testAddFieldsFromString()
     {
         $oneParameter = Field::BUDGET_REMAINING;
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addFieldsFromString($oneParameter);
         $this->assertEquals(
@@ -48,7 +55,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         );
 
         $twoParameter = Field::PROMOTED_OBJECT . ', ' . Field::AD_SET_SCHEDULE;
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->addFieldsFromString($twoParameter);
         $this->assertEquals(
@@ -110,7 +117,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
             'see https://github.com/facebook/facebook-php-ads-sdk/issues/193 for more details'
         );
         $limit = 11;
-        $params = $this->getNewEmptyParams();
+        $params = new Params();
 
         $params->setLimit($limit);
         $this->assertEquals(['fields' => '', 'limit' => $limit], $params->getParamsArray());
@@ -129,17 +136,5 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         }
 
         return $result;
-    }
-
-    /**
-     * @return Params
-     */
-    private function getNewEmptyParams()
-    {
-        $params = new Params();
-        $this->assertEquals('?fields=', $params->getBatchQuery());
-        $this->assertEquals(['fields' => ''], $params->getParamsArray());
-
-        return $params;
     }
 }
