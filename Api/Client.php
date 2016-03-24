@@ -1,5 +1,4 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Api;
 
 use Facebook\Facebook;
