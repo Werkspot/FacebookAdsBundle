@@ -70,7 +70,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testBody_CantSetMethodGET()
     {
         $request = $this->getNewEmptyRequest();
-        $request->setBody('this should not be posible');
+        $request->setBody('this should not be possible');
     }
 
     /**
@@ -79,7 +79,8 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testBody_CantSetMethodDELETE()
     {
         $request = $this->getNewEmptyRequest();
-        $request->setBody('this should not be posible');
+        $request->setMethod(Method::get(Method::METHOD_DELETE));
+        $request->setBody('this should not be possible');
     }
 
     /**

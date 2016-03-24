@@ -1,5 +1,5 @@
 <?php
-namespace Werkspot\FacebookAdsBundle\Model\Batch \Enum;
+namespace Werkspot\FacebookAdsBundle\Model\Batch\Enum;
 
 use Werkspot\ApiLibrary\Enum\AbstractEnum;
 

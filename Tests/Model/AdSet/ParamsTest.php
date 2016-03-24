@@ -99,7 +99,8 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testLimit()
     {
         $this->markTestIncomplete(
-            'Waiting for issue to be resolved'
+            'Waiting for issue to be resolved by Facebook. ' .
+            'see https://github.com/facebook/facebook-php-ads-sdk/issues/193 for more details'
         );
         $limit = 11;
         $params = $this->getNewEmptyParams();
