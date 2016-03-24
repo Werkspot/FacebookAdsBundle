@@ -95,8 +95,12 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         }
     }
 
+
     public function testLimit()
     {
+        $this->markTestIncomplete(
+            'Waiting for issue to be resolved'
+        );
         $limit = 11;
         $params = $this->getNewEmptyParams();
 

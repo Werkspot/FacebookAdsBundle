@@ -70,8 +70,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testGetFromBulk()
     {
-        $responseClass =  new \stdClass();
-        $responseClass->getBody=function(){ return "hello!";};
+        $responseMock =  Mockery::mock(\stdClass::class);
+        $responseMock->shouldReceive('getBody')->once();
+
         $batch = new Batch();
         $api = $this->getApi(self::APP_ID, self::APP_SECRET, self::ACCESS_TOKEN);
 
@@ -79,9 +80,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $facebookMock
             ->shouldReceive('setDefaultAccessToken')->withArgs([self::ACCESS_TOKEN])
             ->shouldReceive('post')->withArgs(['/', $batch->getArray()])
-            ->andReturn($responseClass);
+            ->andReturn($responseMock);
 
-        $response = $api->getFromBulk($batch);
+        $api->getFromBulk($batch);
 
     }
 
