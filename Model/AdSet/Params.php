@@ -87,7 +87,7 @@ class Params implements ParamsInterface
      */
     public function getBatchQuery()
     {
-        return "?" . http_build_query($this->getParamsArray());
+        return '?' . http_build_query($this->getParamsArray());
     }
 
 }

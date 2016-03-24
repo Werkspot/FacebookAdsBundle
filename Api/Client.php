@@ -42,7 +42,7 @@ class Client extends AbstractClient
 
     /**
      * @param int $accountId
-     * @param AdSetParams $params
+     * @param null|AdSetParams $params
      *
      * @return \FacebookAds\Cursor
      */

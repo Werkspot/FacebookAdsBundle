@@ -12,7 +12,7 @@ class Batch
     private $requests=[];
 
     /**
-     * @param mixed $requests
+     * @param Request $requests
      */
     public function addRequests(Request $requests)
     {

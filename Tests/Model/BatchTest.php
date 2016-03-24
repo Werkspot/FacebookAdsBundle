@@ -48,7 +48,7 @@ class BatchTest extends PHPUnit_Framework_TestCase
     private function getNewEmptyBatch()
     {
         $batch = new Batch();
-        $this->assertEquals(['batch' => "[]"], $batch->getArray());
+        $this->assertEquals(['batch' => '[]'], $batch->getArray());
         return $batch;
     }
 }

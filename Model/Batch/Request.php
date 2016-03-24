@@ -36,7 +36,7 @@ class Request
 
     /**
      * @param string $relativeUrl
-     * @param ParamsInterface $params
+     * @param null|ParamsInterface $params
      */
     public function setRelativeUrl($relativeUrl, ParamsInterface $params = null)
     {
@@ -65,6 +65,7 @@ class Request
      */
     public function getArray()
     {
+        $result = [];
         $result['method'] = $this->method->getValue();
         $result['relative_url'] = $this->relativeUrl;
         if ($this->body !== null) {
