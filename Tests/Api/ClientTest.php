@@ -7,6 +7,7 @@ use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AsyncJobInsights;
 use FacebookAds\Object\Campaign;
 use Mockery;
+use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
 use Werkspot\FacebookAdsBundle\Api\Client;
 use Werkspot\FacebookAdsBundle\Api\Exception\InsightsTimeoutException;
@@ -96,9 +97,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $appId
-     * @param $appSecret
-     * @param $accessToken
+     * @param int $appId
+     * @param string $appSecret
+     * @param string $accessToken
      *
      * @return Client
      */
@@ -112,9 +113,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param InsightsParams $params
-     * @param $asyncJobInsightsMock
+     * @param MockInterface $asyncJobInsightsMock
      */
-    private function mockCampaign(InsightsParams $params, $asyncJobInsightsMock)
+    private function mockCampaign(InsightsParams $params, MockInterface $asyncJobInsightsMock)
     {
         $campaignMock = \Mockery::mock('overload:' . Campaign::class);
         $campaignMock->shouldReceive('getInsightsAsync')
