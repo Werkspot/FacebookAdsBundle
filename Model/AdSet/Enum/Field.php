@@ -1,7 +1,7 @@
 <?php
 namespace Werkspot\FacebookAdsBundle\Model\AdSet\Enum;
 
-use Werkspot\ApiLibrary\Enum\AbstractEnum;
+use Werkspot\Enum\AbstractEnum;
 
 class Field extends AbstractEnum
 {

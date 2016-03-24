@@ -2,7 +2,7 @@
 
 namespace Werkspot\FacebookAdsBundle\Model\Insight\Enum;
 
-use Werkspot\ApiLibrary\Enum\AbstractEnum;
+use Werkspot\Enum\AbstractEnum;
 
 class ActionReportTime extends AbstractEnum
 {

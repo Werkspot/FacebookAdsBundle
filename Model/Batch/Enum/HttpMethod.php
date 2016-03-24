@@ -1,7 +1,7 @@
 <?php
 namespace Werkspot\FacebookAdsBundle\Model\Batch\Enum;
 
-use Werkspot\ApiLibrary\Enum\AbstractEnum;
+use Werkspot\Enum\AbstractEnum;
 
 class HttpMethod extends AbstractEnum
 {
