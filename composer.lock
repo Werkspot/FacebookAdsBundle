@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ac4be99e3de17f4fea9aa6552a4b2292",
-    "content-hash": "685d7151a90e3bb94afc2ad6ec37adb3",
+    "hash": "5784f0f6967768dc3f3a40b9a2f8c592",
+    "content-hash": "a4b3c26b8dee9ef2488fd19967cff05a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1635,16 +1635,16 @@
         },
         {
             "name": "werkspot/enum",
-            "version": "v1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Werkspot/Enum.git",
-                "reference": "7370d489e54abe57619017f5a023832cb74efaf0"
+                "reference": "ee679ae6c6ae9f7319efb8a47256c0e0ed79ddfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Werkspot/Enum/zipball/7370d489e54abe57619017f5a023832cb74efaf0",
-                "reference": "7370d489e54abe57619017f5a023832cb74efaf0",
+                "url": "https://api.github.com/repos/Werkspot/Enum/zipball/ee679ae6c6ae9f7319efb8a47256c0e0ed79ddfb",
+                "reference": "ee679ae6c6ae9f7319efb8a47256c0e0ed79ddfb",
                 "shasum": ""
             },
             "require": {
@@ -1655,8 +1655,10 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Werkspot\\Enum": "src/"
+                "psr-4": {
+                    "Werkspot\\Enum\\": [
+                        "src/"
+                    ]
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1671,7 +1673,7 @@
                 }
             ],
             "description": "Werkspot's Enum Library",
-            "time": "2016-03-24 15:33:22"
+            "time": "2016-03-24 15:42:57"
         }
     ],
     "packages-dev": [
@@ -3099,7 +3101,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "werkspot/enum": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

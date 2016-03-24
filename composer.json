@@ -21,7 +21,7 @@
     "symfony/framework-bundle": "~2.3|~3.0",
     "facebook/php-sdk-v4" : "~5.0",
     "facebook/php-ads-sdk": "2.5.*",
-    "werkspot/enum": "^1.0"
+    "werkspot/enum": "dev-master"
   },
   "require-dev": {
     "mockery/mockery": "~0.9",
