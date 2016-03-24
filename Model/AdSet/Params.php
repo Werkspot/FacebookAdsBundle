@@ -87,14 +87,7 @@ class Params implements ParamsInterface
      */
     public function getBatchQuery()
     {
-        $params="?";
-        $params .= 'fields=' . implode(', ', $this->fields);
-
-        if ($this->limit) {
-            $params .= '&limit=' . $this->limit;
-        }
-
-        return $params;
+        return "?" . http_build_query($this->getParamsArray());
     }
 
 }

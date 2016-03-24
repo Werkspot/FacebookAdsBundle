@@ -1,13 +1,13 @@
 <?php
 namespace Werkspot\FacebookAdsBundle\Model\Batch;
 
-use Werkspot\FacebookAdsBundle\Model\Batch\Enum\Method;
+use Werkspot\FacebookAdsBundle\Model\Batch\Enum\HttpMethod;
 use Werkspot\FacebookAdsBundle\Model\ParamsInterface;
 
 class Request
 {
     /**
-     * @var Method
+     * @var HttpMethod
      */
     private $method;
 
@@ -23,13 +23,13 @@ class Request
 
     public function __construct()
     {
-        $this->method = Method::get(Method::METHOD_GET);
+        $this->method = HttpMethod::get(HttpMethod::METHOD_GET);
     }
 
     /**
-     * @param string $method
+     * @param HttpMethod $method
      */
-    public function setMethod($method)
+    public function setMethod(HttpMethod $method)
     {
         $this->method = $method;
     }
@@ -41,7 +41,7 @@ class Request
     public function setRelativeUrl($relativeUrl, ParamsInterface $params = null)
     {
         if ($params) {
-            $this->relativeUrl = $relativeUrl.$params->getBatchQuery();
+            $this->relativeUrl = $relativeUrl . $params->getBatchQuery();
         } else {
             $this->relativeUrl = $relativeUrl;
         }
@@ -54,7 +54,7 @@ class Request
      */
     public function setBody($body)
     {
-        if ($this->method == Method::get(Method::METHOD_GET) || $this->method == Method::get(Method::METHOD_DELETE)) {
+        if ($this->method == HttpMethod::get(HttpMethod::METHOD_GET) || $this->method == HttpMethod::get(HttpMethod::METHOD_DELETE)) {
             throw new \Exception('Body is only allowed for POST & PUT method');
         }
         $this->body = $body;

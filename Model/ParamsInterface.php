@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Werkspot\FacebookAdsBundle\Model;
-
 
 interface ParamsInterface
 {

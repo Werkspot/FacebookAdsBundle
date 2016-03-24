@@ -1,5 +1,4 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Model\Insight;
 
 use Werkspot\FacebookAdsBundle\Model\Insight\Enum\ActionReportTime;
@@ -158,30 +157,7 @@ class Params implements ParamsInterface
      */
     public function getBatchQuery()
     {
-        $params="?";
-        $params .= 'fields=' . implode(', ', $this->fields);
-
-        if ($this->datePreset) {
-            $params .= '&date_preset=' . $this->datePreset->getValue();
-        }
-
-        if ($this->timeRange) {
-            $params .= '&time_range=' . $this->timeRange->getParamsArray();
-        }
-
-        if ($this->actionReportTime) {
-            $params .= '&action_report_time=' . $this->actionReportTime->getValue();
-        }
-
-        if ($this->defaultSummary !== null) {
-            $params .= '&default_summary=' . $this->defaultSummary;
-        }
-
-        if ($this->level) {
-            $params .= '&level=' . $this->level->getValue();
-        }
-
-        return $params;
+        return "?" . http_build_query($this->getParamsArray());
     }
 
 }

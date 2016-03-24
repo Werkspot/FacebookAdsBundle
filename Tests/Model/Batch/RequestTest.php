@@ -3,7 +3,7 @@ namespace Werkspot\FacebookAdsBundle\Tests\Model\Batch\Request;
 
 use PHPUnit_Framework_TestCase;
 use Werkspot\FacebookAdsBundle\Model\AdSet\Params;
-use Werkspot\FacebookAdsBundle\Model\Batch\Enum\Method;
+use Werkspot\FacebookAdsBundle\Model\Batch\Enum\HttpMethod;
 use Werkspot\FacebookAdsBundle\Model\Batch\Request;
 
 class RequestTest extends PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
      *
      * @params Method $method
      */
-    public function testMethod(Method $method)
+    public function testMethod(HttpMethod $method)
     {
         $request = $this->getNewEmptyRequest();
 
@@ -27,18 +27,18 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
     public function testRelativeUrl()
     {
-        $url = 'test';
+        $relativeUrl = '/example/';
         $request = $this->getNewEmptyRequest();
 
-        $request->setRelativeUrl($url);
+        $request->setRelativeUrl($relativeUrl);
         $this->assertEquals(
-            ['method' => 'GET', 'relative_url' => $url],
+            ['method' => 'GET', 'relative_url' => $relativeUrl],
             $request->getArray()
         );
 
-        $request->setRelativeUrl($url, new Params());
+        $request->setRelativeUrl($relativeUrl, new Params());
         $this->assertEquals(
-            ['method' => 'GET', 'relative_url' => $url . '?fields='],
+            ['method' => 'GET', 'relative_url' => $relativeUrl . '?fields='],
             $request->getArray()
         );
     }
@@ -48,7 +48,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
         $body = 'I can be bet in an POST or PUT request';
         $request = $this->getNewEmptyRequest();
 
-        $request->setMethod(Method::get(Method::METHOD_POST));
+        $request->setMethod(HttpMethod::get(HttpMethod::METHOD_POST));
         $request->setBody($body);
         $this->assertEquals(
             ['method' => 'POST', 'body' => $body, 'relative_url' => null],
@@ -56,7 +56,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
         );
 
         $request = $this->getNewEmptyRequest();
-        $request->setMethod(Method::get(Method::METHOD_PUT));
+        $request->setMethod(HttpMethod::get(HttpMethod::METHOD_PUT));
         $request->setBody($body);
         $this->assertEquals(
             ['method' => 'PUT', 'body' => $body, 'relative_url' => null],
@@ -79,7 +79,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testBody_CantSetMethodDELETE()
     {
         $request = $this->getNewEmptyRequest();
-        $request->setMethod(Method::get(Method::METHOD_DELETE));
+        $request->setMethod(HttpMethod::get(HttpMethod::METHOD_DELETE));
         $request->setBody('this should not be possible');
     }
 
@@ -89,9 +89,9 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function getMethodEnumData()
     {
         $result = [];
-        $fields = Method::getValidOptions();
+        $fields = HttpMethod::getValidOptions();
         foreach ($fields as $key => $field) {
-            $result[$field] = [Method::get($field)];
+            $result[$field] = [HttpMethod::get($field)];
         }
 
         return $result;
@@ -104,7 +104,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $this->assertEquals(
-            ['method' => Method::METHOD_GET, 'relative_url' => null],
+            ['method' => HttpMethod::METHOD_GET, 'relative_url' => null],
             $request->getArray()
         );
 

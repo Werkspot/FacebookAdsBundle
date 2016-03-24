@@ -1,9 +1,7 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Tests\Api;
 
 use Facebook\Facebook;
-use Facebook\FacebookResponse;
 use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AsyncJobInsights;

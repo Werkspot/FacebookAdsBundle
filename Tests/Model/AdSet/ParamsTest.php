@@ -8,7 +8,7 @@ use Werkspot\FacebookAdsBundle\Model\AdSet\Params;
 class ParamsTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider getFieldEnumData
+     * @dataProvider fieldEnumData
      *
      * @params Field $field
      */
@@ -58,7 +58,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getFieldEnumData
+     * @dataProvider fieldEnumData
      *
      * @params Field $field
      */
@@ -76,7 +76,15 @@ class ParamsTest extends PHPUnit_Framework_TestCase
             ['fields' => ''],
             $params->getParamsArray()
         );
+    }
 
+    /**
+     * @dataProvider fieldEnumData
+     *
+     * @params Field $field
+     */
+    public function testRemoveFieldWithAdditionalField(Field $field)
+    {
         $defaultField = Field::get(Field::ACCOUNT_ID);
         if ($field !== $defaultField) {
             $parameters = $field->getValue() . ', ' . $defaultField->getValue();
@@ -94,8 +102,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
             );
         }
     }
-
-
+    
     public function testLimit()
     {
         $this->markTestIncomplete(
@@ -110,11 +117,10 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('?fields=&limit=' . $limit, $params->getBatchQuery());
     }
 
-
     /**
      * @return array
      */
-    public function getFieldEnumData()
+    public function fieldEnumData()
     {
         $result = [];
         $fields = Field::getValidOptions();

@@ -3,7 +3,7 @@ namespace Werkspot\FacebookAdsBundle\Model\Batch\Enum;
 
 use Werkspot\ApiLibrary\Enum\AbstractEnum;
 
-class Method extends AbstractEnum
+class HttpMethod extends AbstractEnum
 {
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';

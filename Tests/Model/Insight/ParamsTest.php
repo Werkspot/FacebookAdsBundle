@@ -170,7 +170,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
 
         $params->setDefaultSummary(false);
         $this->assertEquals(['fields' => '', 'default_summary' => false], $params->getParamsArray());
-        $this->assertEquals('?fields=&default_summary=', $params->getBatchQuery());
+        $this->assertEquals('?fields=&default_summary=0', $params->getBatchQuery());
     }
 
     /**
