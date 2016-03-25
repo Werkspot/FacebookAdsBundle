@@ -1,5 +1,4 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Tests\Model\Insight;
 
 use PHPUnit_Framework_TestCase;
@@ -12,7 +11,6 @@ use Werkspot\FacebookAdsBundle\Model\Insight\Params\TimeRange;
 
 class ParamsTest extends PHPUnit_Framework_TestCase
 {
-
     public function testNewParamsIsEmpty()
     {
         $params = new Params();
