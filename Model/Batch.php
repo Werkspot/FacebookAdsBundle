@@ -5,6 +5,7 @@ use Werkspot\FacebookAdsBundle\Model\Batch\Request;
 
 class Batch
 {
+    const MAX_REQUESTS_PER_BATCH = 50;
 
     /**
      * @var Request[]
@@ -29,6 +30,6 @@ class Batch
             $result[] = $request->getArray();
         }
 
-        return ['batch' => json_encode($result)];
+        return $result;
     }
 }

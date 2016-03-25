@@ -16,6 +16,11 @@ class Params implements ParamsInterface
     private $fields = [];
 
     /**
+     * @var string
+     */
+    private $filtering;
+
+    /**
      * @var TimeRange
      */
     private $timeRange;
@@ -79,6 +84,23 @@ class Params implements ParamsInterface
     }
 
     /**
+     * @return string
+     */
+    public function getFiltering()
+    {
+        return $this->filtering;
+    }
+
+    /**
+     * @param string $filtering
+     */
+    public function setFiltering($filtering)
+    {
+        $this->filtering = $filtering;
+    }
+
+
+    /**
      * @param TimeRange $timeRange
      */
     public function setTimeRange(TimeRange $timeRange)
@@ -131,6 +153,10 @@ class Params implements ParamsInterface
 
         if ($this->timeRange) {
             $params['time_range'] = $this->timeRange->getParamsArray();
+        }
+
+        if ($this->filtering) {
+            $params['filtering'] = $this->filtering;
         }
 
         if ($this->datePreset) {

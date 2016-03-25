@@ -52,17 +52,23 @@ class Client extends AbstractClient
 
         $account = new AdAccount('act_'.$accountId);
         $params = ($params) ? $params->getParamsArray() : [];
-        $adSets = $account->getAdSets($params);
+        $cursor = $account->getAdSets($params);
 
-        return $adSets;
+        return $cursor;
     }
 
-    public function getFromBulk(Batch $batch)
+    public function getFromBatch(Batch $batch)
     {
+        $responseBody = [];
         $facebook = $this->initFacebook();
-        $response = $facebook->post('/', $batch->getArray());
+        $batchArray = array_chunk($batch->getArray(), Batch::MAX_REQUESTS_PER_BATCH);
+        foreach ($batchArray as $batch) {
+            $response = $facebook->post('/', ['batch' => json_encode($batch)]);
+            $body = json_decode($response->getBody());
+            $responseBody = array_merge($responseBody, $body);
+        }
 
-        return $response->getBody();
+        return $responseBody;
     }
 
 }
