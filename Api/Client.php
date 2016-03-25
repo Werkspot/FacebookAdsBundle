@@ -1,10 +1,12 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Api;
 
+use Facebook\Facebook;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\Campaign;
 use Werkspot\FacebookAdsBundle\Api\Exception\InsightsTimeoutException;
+use Werkspot\FacebookAdsBundle\Model\AdSet\Params as AdSetParams;
+use Werkspot\FacebookAdsBundle\Model\Batch;
 use Werkspot\FacebookAdsBundle\Model\Insight\Params as InsightParams;
 
 class Client extends AbstractClient
@@ -39,17 +41,28 @@ class Client extends AbstractClient
     }
 
     /**
-     * @param AdAccount $account
-     * @param array $params
+     * @param int $accountId
+     * @param null|AdSetParams $params
      *
      * @return \FacebookAds\Cursor
      */
-    public function getAdSetFromAccount(AdAccount $account, array $params = [])
+    public function getAdSetFromAccount($accountId, AdSetParams $params = null)
     {
         $this->initApi(); //-- important! always init the API
 
+        $account = new AdAccount('act_'.$accountId);
+        $params = ($params) ? $params->getParamsArray() : [];
         $adSets = $account->getAdSets($params);
 
         return $adSets;
     }
+
+    public function getFromBulk(Batch $batch)
+    {
+        $facebook = $this->initFacebook();
+        $response = $facebook->post('/', $batch->getArray());
+
+        return $response->getBody();
+    }
+
 }

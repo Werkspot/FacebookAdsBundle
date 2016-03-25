@@ -1,18 +1,17 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Model\Insight;
 
-use FacebookAds\Object\Fields\InsightsFields;
 use Werkspot\FacebookAdsBundle\Model\Insight\Enum\ActionReportTime;
 use Werkspot\FacebookAdsBundle\Model\Insight\Enum\DatePreset;
 use Werkspot\FacebookAdsBundle\Model\Insight\Enum\Field;
 use Werkspot\FacebookAdsBundle\Model\Insight\Enum\Level;
 use Werkspot\FacebookAdsBundle\Model\Insight\Params\TimeRange;
+use Werkspot\FacebookAdsBundle\Model\ParamsInterface;
 
-class Params
+class Params implements ParamsInterface
 {
     /**
-     * @var InsightsFields[]
+     * @var Field[]
      */
     private $fields = [];
 
@@ -121,6 +120,9 @@ class Params
         $this->level = $level;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParamsArray()
     {
         $params = [];
@@ -148,5 +150,13 @@ class Params
         }
 
         return $params;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBatchQuery()
+    {
+        return '?' . http_build_query($this->getParamsArray());
     }
 }

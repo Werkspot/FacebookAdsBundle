@@ -20,7 +20,7 @@
   [
     {
       "type": "vcs",
-      "url": "git@github.com:Werkspot/apilib-general.git"
+      "url": "https://github.com/Werkspot/Enum"
     }
   ],
   "require": {
@@ -28,7 +28,7 @@
     "symfony/framework-bundle": "~2.3|~3.0",
     "facebook/php-sdk-v4" : "~5.0",
     "facebook/php-ads-sdk": "2.5.*",
-    "werkspot/apilib-general": "^0.1"
+    "werkspot/enum": "1.0.1"
   },
   "require-dev": {
     "mockery/mockery": "~0.9",

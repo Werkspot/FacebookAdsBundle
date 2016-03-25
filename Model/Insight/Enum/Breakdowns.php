@@ -1,8 +1,7 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Model\Insight\Enum;
 
-use Werkspot\ApiLibrary\Enum\AbstractEnum;
+use Werkspot\Enum\AbstractEnum;
 
 class Breakdowns extends AbstractEnum
 {
