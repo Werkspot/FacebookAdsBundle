@@ -67,7 +67,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, $apiResult);
     }
 
-    public function testGetFromBulk()
+    public function testGetFromBatch()
     {
         $responseMock =  Mockery::mock(\stdClass::class);
         $responseMock->shouldReceive('getBody')->once();
@@ -81,7 +81,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('post')->withArgs(['/', $batch->getArray()])
             ->andReturn($responseMock);
 
-        $api->getFromBulk($batch);
+        $api->getFromBatch($batch);
 
     }
 
