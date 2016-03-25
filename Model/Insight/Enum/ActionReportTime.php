@@ -1,5 +1,4 @@
 <?php
-
 namespace Werkspot\FacebookAdsBundle\Model\Insight\Enum;
 
 use Werkspot\Enum\AbstractEnum;
