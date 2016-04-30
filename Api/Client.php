@@ -63,9 +63,13 @@ class Client extends AbstractClient
         $facebook = $this->initFacebook();
         $batchArray = array_chunk($batch->getArray(), Batch::MAX_REQUESTS_PER_BATCH);
         foreach ($batchArray as $batch) {
+            
             $response = $facebook->post('/', ['batch' => json_encode($batch)]);
             $body = json_decode($response->getBody());
             $responseBody = array_merge($responseBody, $body);
+            
+            // To prevent from api access limits
+            sleep(120);
         }
 
         return $responseBody;
