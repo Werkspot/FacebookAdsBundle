@@ -15,7 +15,7 @@ class BatchTest extends PHPUnit_Framework_TestCase
         $request->setRelativeUrl('12345/insights');
 
         $batch->addRequests($request);
-        $this->assertEquals(['batch' => json_encode([$request->getArray()])], $batch->getArray());
+        $this->assertEquals([$request->getArray()], $batch->getArray());
     }
 
     public function testAddMultipleRequest()
@@ -32,12 +32,8 @@ class BatchTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'batch' => json_encode(
-                    [
-                        $request_1->getArray(),
-                        $request_2->getArray()
-                    ]
-                )
+                $request_1->getArray(),
+                $request_2->getArray()
             ],
             $batch->getArray());
     }
@@ -48,7 +44,7 @@ class BatchTest extends PHPUnit_Framework_TestCase
     private function getNewEmptyBatch()
     {
         $batch = new Batch();
-        $this->assertEquals(['batch' => '[]'], $batch->getArray());
+        $this->assertEquals([], $batch->getArray());
         return $batch;
     }
 }

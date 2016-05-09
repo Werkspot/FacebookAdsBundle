@@ -10,7 +10,7 @@ class Batch
     /**
      * @var Request[]
      */
-    private $requests=[];
+    private $requests = [];
 
     /**
      * @param Request $requests
