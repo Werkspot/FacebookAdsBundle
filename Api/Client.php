@@ -51,8 +51,7 @@ class Client extends AbstractClient
         $this->initApi(); //-- important! always init the API
 
         $account = new AdAccount('act_'.$accountId);
-        $params = ($params) ? $params->getParamsArray() : [];
-        $cursor = $account->getAdSets($params);
+        $cursor = $account->getAdSets($params->getFieldsArray(), $params->getParamsArray());
 
         return $cursor;
     }

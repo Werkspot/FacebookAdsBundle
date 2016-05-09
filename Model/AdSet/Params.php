@@ -55,15 +55,11 @@ class Params implements ParamsInterface
     }
 
     /**
-     * @deprecated
-     * @see https://github.com/facebook/facebook-php-ads-sdk/issues/193
-     *
      * @param int $limit
      */
     public function setLimit($limit)
     {
-        /** todo: uncomment after issue is resolved */
-//        $this->limit = $limit;
+        $this->limit = $limit;
     }
 
     /**
@@ -73,13 +69,19 @@ class Params implements ParamsInterface
     {
         $params = [];
 
-        $params['fields'] = implode(', ', $this->fields);
-
         if ($this->limit) {
             $params['limit'] = (string) $this->limit;
         }
 
         return $params;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldsArray()
+    {
+        return $this->fields;
     }
 
     /**

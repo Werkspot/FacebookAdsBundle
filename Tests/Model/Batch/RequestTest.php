@@ -38,7 +38,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $request->setRelativeUrl($relativeUrl, new Params());
         $this->assertEquals(
-            ['method' => 'GET', 'relative_url' => $relativeUrl . '?fields='],
+            ['method' => 'GET', 'relative_url' => $relativeUrl . '?'],
             $request->getArray()
         );
     }
