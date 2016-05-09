@@ -134,7 +134,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     {
         $campaignMock = \Mockery::mock('overload:' . Campaign::class);
         $campaignMock->shouldReceive('getInsightsAsync')
-            ->with([], $params->getParamsArray())
+            ->with($params->getFieldsArray(), $params->getParamsArray())
             ->andReturn($asyncJobInsightsMock);
     }
 

@@ -13,18 +13,17 @@ class Client extends AbstractClient
 {
     /**
      * @param int $campaignId
-     * @param InsightParams|null $params
+     * @param InsightParams $params
      *
      * @throws InsightsTimeoutException
      *
      * @return \FacebookAds\Cursor
      */
-    public function getInsights($campaignId, InsightParams $params = null)
+    public function getInsights($campaignId, InsightParams $params)
     {
         $this->initApi(); //-- important! always init the API
         $campaign = new Campaign($campaignId);
-        $params = ($params) ? $params->getParamsArray() : [];
-        $asyncJob = $campaign->getInsightsAsync([], $params);
+        $asyncJob = $campaign->getInsightsAsync($params->getFieldsArray(), $params->getParamsArray());
 
         $timeout = 0;
         while (!$asyncJob->isComplete()) {
@@ -42,11 +41,11 @@ class Client extends AbstractClient
 
     /**
      * @param int $accountId
-     * @param null|AdSetParams $params
+     * @param AdSetParams $params
      *
      * @return \FacebookAds\Cursor
      */
-    public function getAdSetFromAccount($accountId, AdSetParams $params = null)
+    public function getAdSetFromAccount($accountId, AdSetParams $params)
     {
         $this->initApi(); //-- important! always init the API
 
