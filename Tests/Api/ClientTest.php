@@ -69,7 +69,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testGetFromBatch()
     {
-        $returnedData = ['kjdhskfj'];
+        $returnedData = ['Some Data', 'That' => ['gets' => 'returned']];
         $responseMock =  Mockery::mock(\stdClass::class);
         $responseMock->shouldReceive('getBody')->once()->andReturn(json_encode($returnedData));
 
