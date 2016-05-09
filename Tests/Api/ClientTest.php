@@ -69,19 +69,27 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testGetFromBatch()
     {
+        $returnedData = ['kjdhskfj'];
         $responseMock =  Mockery::mock(\stdClass::class);
-        $responseMock->shouldReceive('getBody')->once();
+        $responseMock->shouldReceive('getBody')->once()->andReturn(json_encode($returnedData));
 
+        $request =  new Batch\Request();
         $batch = new Batch();
+        $batch->addRequests($request);
         $api = $this->getApi(self::APP_ID, self::APP_SECRET, self::ACCESS_TOKEN);
 
-        $facebookMock = \Mockery::mock('overload:' . Facebook::class);
+        $facebookMock = Mockery::mock('overload:' . Facebook::class);
         $facebookMock
-            ->shouldReceive('setDefaultAccessToken')->withArgs([self::ACCESS_TOKEN])
-            ->shouldReceive('post')->withArgs(['/', $batch->getArray()])
+            ->shouldReceive('setDefaultAccessToken')
+            ->withArgs([self::ACCESS_TOKEN])
+            ->once();
+        $facebookMock
+            ->shouldReceive('post')
+            ->withArgs(['/', ['batch' => json_encode($batch->getArray())]])
+            ->once()
             ->andReturn($responseMock);
 
-        $api->getFromBatch($batch);
+        $this->assertEquals($returnedData, $api->getFromBatch($batch));
 
     }
 
@@ -89,9 +97,14 @@ class ClientTest extends PHPUnit_Framework_TestCase
     {
         $asyncJobInsightsMock = Mockery::mock(AsyncJobInsights::class);
         $asyncJobInsightsMock
-            ->shouldReceive('read')->twice()
-            ->shouldReceive('isComplete')->andReturn(false, false, true)
-            ->shouldReceive('getResult')->andReturn(self::MOCKED_RESULTS);
+            ->shouldReceive('read')
+            ->twice();
+        $asyncJobInsightsMock
+            ->shouldReceive('isComplete')
+            ->andReturn(false, false, true);
+        $asyncJobInsightsMock
+            ->shouldReceive('getResult')
+            ->andReturn(self::MOCKED_RESULTS);
 
         return $asyncJobInsightsMock;
     }
@@ -106,7 +119,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
     private function getApi($appId, $appSecret, $accessToken)
     {
         $facebookApi = \Mockery::mock('overload:' . Api::class);
-        $facebookApi->shouldReceive('init')->with($appId, $appSecret, $accessToken);
+        $facebookApi
+            ->shouldReceive('init')
+            ->with($appId, $appSecret, $accessToken);
 
         return new Client($appId, $appSecret, $accessToken);
     }

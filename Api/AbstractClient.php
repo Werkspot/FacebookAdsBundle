@@ -52,6 +52,7 @@ abstract class AbstractClient
             ]
         );
         $facebook->setDefaultAccessToken($this->accessToken);
+
         return $facebook;
     }
 }
