@@ -10,9 +10,11 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     public function testNewParamsIsEmpty()
     {
         $params = new Params();
-        $this->assertEquals('?fields=', $params->getBatchQuery());
-        $this->assertEquals(['fields' => ''], $params->getParamsArray());   
+        $this->assertEquals('?', $params->getBatchQuery());
+        $this->assertEquals([], $params->getParamsArray());
+        $this->assertEquals([], $params->getFieldsArray());
     }
+
     
     /**
      * @dataProvider fieldEnumData
@@ -25,10 +27,9 @@ class ParamsTest extends PHPUnit_Framework_TestCase
 
         $params->addField($field);
         $this->assertEquals(
-            ['fields' => $field->getValue()],
-            $params->getParamsArray()
+            [$field->getValue() => $field->getValue()],
+            $params->getFieldsArray()
         );
-        $this->assertEquals('?fields=' . $field->getValue(), $params->getBatchQuery());
     }
 
     public function testAddAllFields()
@@ -37,10 +38,9 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         $params = new Params();
 
         $params->addAllFields();
-        $this->assertEquals(
-            ['fields' => implode(', ', $allField)],
-            $params->getParamsArray()
-        );
+        foreach ($allField as $field){
+            $this->assertTrue(in_array($field, $params->getFieldsArray()));
+        }
     }
 
     public function testAddFieldsFromString()
@@ -50,18 +50,17 @@ class ParamsTest extends PHPUnit_Framework_TestCase
 
         $params->addFieldsFromString($oneParameter);
         $this->assertEquals(
-            ['fields' => $oneParameter],
-            $params->getParamsArray()
+            [$oneParameter => $oneParameter],
+            $params->getFieldsArray()
         );
 
-        $twoParameter = Field::PROMOTED_OBJECT . ', ' . Field::AD_SET_SCHEDULE;
+        $twoParameter = [Field::PROMOTED_OBJECT, Field::AD_SET_SCHEDULE];
         $params = new Params();
 
-        $params->addFieldsFromString($twoParameter);
-        $this->assertEquals(
-            ['fields' => $twoParameter],
-            $params->getParamsArray()
-        );
+        $params->addFieldsFromString(implode(', ', $twoParameter));
+        foreach ($twoParameter as $field){
+            $this->assertTrue(in_array($field, $params->getFieldsArray()));
+        }
     }
 
     /**
@@ -74,14 +73,14 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         $params = new Params();
         $params->addField($field);
         $this->assertEquals(
-            ['fields' => $field->getValue()],
-            $params->getParamsArray()
+            [$field->getValue() => $field->getValue()],
+            $params->getFieldsArray()
         );
         $params->removeField($field);
 
         $this->assertEquals(
-            ['fields' => ''],
-            $params->getParamsArray()
+            [],
+            $params->getFieldsArray()
         );
     }
 
@@ -94,34 +93,30 @@ class ParamsTest extends PHPUnit_Framework_TestCase
     {
         $defaultField = Field::get(Field::ACCOUNT_ID);
         if ($field !== $defaultField) {
-            $parameters = $field->getValue() . ', ' . $defaultField->getValue();
+            $parameters = [$field->getValue(), $defaultField->getValue()];
             $params = new Params();
-            $params->addFieldsFromString($parameters);
-            $this->assertEquals(
-                ['fields' => $parameters],
-                $params->getParamsArray()
-            );
+            $params->addFieldsFromString(implode(', ', $parameters));
+            foreach ($parameters as $testField){
+                $this->assertTrue(in_array($testField, $params->getFieldsArray()));
+            }
+
             $params->removeField($field);
 
             $this->assertEquals(
-                ['fields' => $defaultField->getValue()],
-                $params->getParamsArray()
+                [$defaultField->getValue() => $defaultField->getValue()],
+                $params->getFieldsArray()
             );
         }
     }
     
     public function testLimit()
     {
-        $this->markTestIncomplete(
-            'Waiting for issue to be resolved by Facebook. ' .
-            'see https://github.com/facebook/facebook-php-ads-sdk/issues/193 for more details'
-        );
         $limit = 11;
         $params = new Params();
 
         $params->setLimit($limit);
-        $this->assertEquals(['fields' => '', 'limit' => $limit], $params->getParamsArray());
-        $this->assertEquals('?fields=&limit=' . $limit, $params->getBatchQuery());
+        $this->assertEquals(['limit' => $limit], $params->getParamsArray());
+        $this->assertEquals('?limit=' . $limit, $params->getBatchQuery());
     }
 
     /**

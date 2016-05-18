@@ -59,7 +59,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $result = ['result' => true];
         $accountMock = Mockery::mock('overload:' . AdAccount::class);
         $accountMock
-            ->shouldReceive('getAdSets')->with($params->getParamsArray())
+            ->shouldReceive('getAdSets')->with($params->getFieldsArray(), $params->getParamsArray())
             ->andReturn($result);
 
         $api = $this->getApi(self::APP_ID, self::APP_SECRET, self::ACCESS_TOKEN);
@@ -134,7 +134,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     {
         $campaignMock = \Mockery::mock('overload:' . Campaign::class);
         $campaignMock->shouldReceive('getInsightsAsync')
-            ->with([], $params->getParamsArray())
+            ->with($params->getFieldsArray(), $params->getParamsArray())
             ->andReturn($asyncJobInsightsMock);
     }
 

@@ -149,8 +149,6 @@ class Params implements ParamsInterface
     {
         $params = [];
 
-        $params['fields'] = implode(', ', $this->fields);
-
         if ($this->timeRange) {
             $params['time_range'] = $this->timeRange->getParamsArray();
         }
@@ -177,6 +175,12 @@ class Params implements ParamsInterface
 
         return $params;
     }
+
+    public function getFieldsArray()
+    {
+        return $this->fields;
+    }
+
 
     /**
      * {@inheritdoc}

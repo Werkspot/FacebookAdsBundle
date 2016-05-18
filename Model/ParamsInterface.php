@@ -9,6 +9,11 @@ interface ParamsInterface
     public function getParamsArray();
 
     /**
+     * @return array
+     */
+    public function getFieldsArray();
+
+    /**
      * @return string
      */
     public function getBatchQuery();
