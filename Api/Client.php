@@ -65,12 +65,16 @@ class Client extends AbstractClient
             $response = $facebook->post('/', ['batch' => json_encode($batch)]);
             $body = json_decode($response->getBody(), true);
             $responseBody = array_merge($responseBody, $body);
-            
-            // To prevent from api access limits
-            sleep(120);
+
+            $this->preventReachingApiLimit();
         }
 
         return $responseBody;
+    }
+
+    private function preventReachingApiLimit()
+    {
+        sleep(120);
     }
 
 }

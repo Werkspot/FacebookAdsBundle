@@ -11,7 +11,7 @@ use Werkspot\FacebookAdsBundle\Model\ParamsInterface;
 class Params implements ParamsInterface
 {
     /**
-     * @var Field[]
+     * @var array
      */
     private $fields = [];
 
@@ -171,6 +171,10 @@ class Params implements ParamsInterface
 
         if ($this->level) {
             $params['level'] = $this->level->getValue();
+        }
+
+        if (!empty($this->fields)) {
+            $params['fields'] = implode(',', $this->fields);
         }
 
         return $params;

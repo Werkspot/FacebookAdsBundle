@@ -33,6 +33,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
             [$field->getValue() => $field->getValue()],
             $params->getFieldsArray()
         );
+        $this->assertEquals(['fields' => $field], $params->getParamsArray());
     }
 
     public function testAddAllFields()
@@ -41,6 +42,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase
         $params = new Params();
 
         $params->addAllFields();
+        $this->assertEquals(['fields' => implode(',', $allField)], $params->getParamsArray());
         foreach ($allField as $field){
             $this->assertTrue(in_array($field, $params->getFieldsArray()));
         }
