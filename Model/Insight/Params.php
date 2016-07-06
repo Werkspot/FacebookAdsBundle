@@ -173,7 +173,7 @@ class Params implements ParamsInterface
             $params['level'] = $this->level->getValue();
         }
 
-        if ($this->fields) {
+        if (!empty($this->fields)) {
             $params['fields'] = implode(',', $this->fields);
         }
 
