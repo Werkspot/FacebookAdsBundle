@@ -66,11 +66,15 @@ class Client extends AbstractClient
             $body = json_decode($response->getBody(), true);
             $responseBody = array_merge($responseBody, $body);
 
-            // To prevent from api access limits
-            sleep(120);
+            $this->preventReachingApiLimit();
         }
 
         return $responseBody;
+    }
+
+    private function preventReachingApiLimit()
+    {
+        sleep(120);
     }
 
 }
