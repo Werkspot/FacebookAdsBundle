@@ -11,7 +11,7 @@ use Werkspot\FacebookAdsBundle\Model\ParamsInterface;
 class Params implements ParamsInterface
 {
     /**
-     * @var Field[]
+     * @var array
      */
     private $fields = [];
 
