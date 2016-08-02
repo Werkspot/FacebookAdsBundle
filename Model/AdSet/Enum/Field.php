@@ -28,7 +28,6 @@ class Field extends AbstractEnum
     const TARGETING = 'targeting';
     const PROMOTED_OBJECT = 'promoted_object';
     const AD_LABELS = 'adlabels';
-    const PRODUCT_AD_BEHAVIOR = 'product_ad_behavior';
     const CONFIGURED_STATUS = 'configured_status';
     const EFFECTIVE_STATUS = 'effective_status';
 }
