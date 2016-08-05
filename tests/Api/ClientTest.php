@@ -15,9 +15,14 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $accessToken = 'assestoken';
 
         $client = new Client($appId, $appSecret, $accessToken);
-        $this->assertSame($accessToken, $client->getAccessToken());
+        self::assertSame($accessToken, $client->getAccessToken());
 
-        $this->assertInstanceOf(FacebookApp::class, $client->getFacebookApp());
-        $this->assertInstanceOf(FacebookClient::class, $client->getFacebookClient());
+        $facebookApp = $client->getFacebookApp();
+        self::assertInstanceOf(FacebookApp::class, $facebookApp);
+        self::assertEquals($appId, $facebookApp->getId());
+        self::assertEquals($appSecret, $facebookApp->getSecret());
+
+        self::assertInstanceOf(FacebookClient::class, $client->getFacebookClient());
+
     }
 }

@@ -2,7 +2,7 @@
 namespace Werkspot\FacebookAdsBundle\Api\AdReportRun\Request;
 
 use Werkspot\FacebookAdsBundle\Api\AdReportRun\Enum\Field;
-use Werkspot\FacebookAdsBundle\src\Api\AdReportRun\Request\Filter\Operator;
+use Werkspot\FacebookAdsBundle\Api\AdReportRun\Request\Filter\Operator;
 
 class Filter
 {

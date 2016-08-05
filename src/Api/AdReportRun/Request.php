@@ -1,6 +1,8 @@
 <?php
 namespace Werkspot\FacebookAdsBundle\Api\AdReportRun;
 
+use Facebook\FacebookRequest;
+use Werkspot\FacebookAdsBundle\Api\AdReportRun;
 use Werkspot\FacebookAdsBundle\Api\AdReportRun\Enum\ActionAttributionWindows;
 use Werkspot\FacebookAdsBundle\Api\AdReportRun\Enum\ActionBreakdown;
 use Werkspot\FacebookAdsBundle\Api\AdReportRun\Enum\ActionReportTime;
@@ -17,6 +19,7 @@ use Werkspot\FacebookAdsBundle\Api\AdReportRun\Request\Exception\TimeIncrementVa
 use Werkspot\FacebookAdsBundle\Api\AdReportRun\Request\Filter;
 use Werkspot\FacebookAdsBundle\Api\AdReportRun\Request\TimeRange;
 use Werkspot\FacebookAdsBundle\Api\Client;
+use Werkspot\FacebookAdsBundle\Api\ClientInterface;
 
 class Request
 {
@@ -71,7 +74,7 @@ class Request
     /** @var Field[] */
     private $summary;
 
-    /** @var SummaryActionBreakdown */
+    /** @var SummaryActionBreakdown[] */
     private $summaryActionBreakdowns;
 
     /** @var TimeIncrement */
@@ -83,13 +86,14 @@ class Request
     /** @var TimeRange[] */
     private $timeRanges;
 
-    public function __construct(string $accountId, Client $client)
+    public function __construct(string $accountId, ClientInterface $client)
     {
         $this->accountId = $accountId;
         $this->client = $client;
         $this->actionAttributionWindows = ActionAttributionWindows::get(ActionAttributionWindows::DEFAULT);
         $this->actionBreakdowns[ActionBreakdown::TYPE] = ActionBreakdown::get(ActionBreakdown::TYPE);
         $this->actionReportTime = ActionReportTime::get(ActionReportTime::IMPRESSION);
+        $this->breakdowns = [];
         $this->datePreset =  DatePreset::get(DatePreset::LAST_30_DAYS);
         $this->defaultSummary = false;
         $this->exportColumns = [];
@@ -103,9 +107,14 @@ class Request
         $this->actionAttributionWindows = $actionAttributionWindows;
     }
 
-    public function setActionBreakdowns(ActionBreakdown $actionBreakdowns)
+    public function addActionBreakdown(ActionBreakdown $actionBreakdown)
     {
-        $this->actionBreakdowns = $actionBreakdowns;
+        $this->actionBreakdowns[$actionBreakdown->getValue()] = $actionBreakdown;
+    }
+
+    public function removeActionBreakdown(ActionBreakdown $actionBreakdown)
+    {
+        unset($this->actionBreakdowns[$actionBreakdown->getValue()]);
     }
 
     public function setActionReportTime(ActionReportTime $actionReportTime)
@@ -113,16 +122,16 @@ class Request
         $this->actionReportTime = $actionReportTime;
     }
 
-    public function setBreakdowns(Breakdown $breakdown)
+    public function setBreakdown(Breakdown $breakdown)
     {
         $this->breakdowns = [];
-        $this->addBreakdowns($breakdown);
+        $this->addBreakdown($breakdown);
     }
 
-    public function addBreakdowns(Breakdown $breakdown)
+    public function addBreakdown(Breakdown $breakdown)
     {
         $this->validateBreakdown($breakdown);
-        $this->breakdowns[] = $breakdown;
+        $this->breakdowns[$breakdown->getValue()] = $breakdown;
     }
 
 
@@ -139,17 +148,16 @@ class Request
     private function validateMultipleBreakdowns(Breakdown $breakdown)
     {
         $allowCombination = [
-            Breakdown::IMPRESSION_DEVICE,
-            Breakdown::PLACEMENT,
-            Breakdown::AGE,
-            Breakdown::GENDER,
+            Breakdown::get(Breakdown::IMPRESSION_DEVICE),
+            Breakdown::get(Breakdown::PLACEMENT),
+            Breakdown::get(Breakdown::AGE),
+            Breakdown::get(Breakdown::GENDER),
         ];
-
         if (count($this->breakdowns) > 0) {
-            if (array_search($allowCombination, $this->breakdowns) == false) {
-                throw new BreakdownValueNotAllowedException('More than one breakdown is not supported, except ["age", "gender"] and ["impression_device", "placement"].');
-            } elseif (in_array($breakdown, $allowCombination) == false) {
+            if (in_array($breakdown, $allowCombination) === false) {
                 throw new BreakdownValueNotAllowedException('Can\'t combine breakdown. allowed combinations are: ["age", "gender"] and ["impression_device", "placement"].');
+            } elseif (in_array(reset($this->breakdowns), $allowCombination) === false) {
+                throw new BreakdownValueNotAllowedException('More than one breakdown is not supported, except ["age", "gender"] and ["impression_device", "placement"].');
             }
         }
     }
@@ -174,9 +182,14 @@ class Request
         $this->defaultSummary = $defaultSummary;
     }
 
-    public function setExportColumns(array $exportColumns)
+    public function addExportColumn(Field $field)
     {
-        $this->exportColumns = $exportColumns;
+        $this->exportColumns[$field->getValue()] = $field->getValue();
+    }
+
+    public function removeExportColumn(Field $field)
+    {
+        unset($this->exportColumns[$field->getValue()]);
     }
 
     public function setExportFormat(ExportFormat $exportFormat)
@@ -247,9 +260,14 @@ class Request
         $this->summary = $summary;
     }
 
-    public function setSummaryActionBreakdowns(SummaryActionBreakdown $summaryActionBreakdowns)
+    public function addSummaryActionBreakdown(SummaryActionBreakdown $summaryActionBreakdown)
     {
-        $this->summaryActionBreakdowns = $summaryActionBreakdowns;
+        $this->summaryActionBreakdowns[$summaryActionBreakdown->getValue()] = $summaryActionBreakdown;
+    }
+
+    public function removeSummaryActionBreakdown(SummaryActionBreakdown $summaryActionBreakdown)
+    {
+        unset($this->summaryActionBreakdowns[$summaryActionBreakdown->getValue()]);
     }
 
     public function setTimeIncrement(TimeIncrement $timeIncrement)
@@ -275,5 +293,182 @@ class Request
     public function addTimeRanges(TimeRange $timeRange)
     {
         $this->timeRanges[] = $timeRange;
+    }
+
+    /**
+     * @return ActionAttributionWindows
+     */
+    public function getActionAttributionWindows(): ActionAttributionWindows
+    {
+        return $this->actionAttributionWindows;
+    }
+
+    /**
+     * @return Enum\ActionBreakdown[]
+     */
+    public function getActionBreakdowns(): array
+    {
+        return $this->actionBreakdowns;
+    }
+
+    /**
+     * @return ActionReportTime
+     */
+    public function getActionReportTime(): ActionReportTime
+    {
+        return $this->actionReportTime;
+    }
+
+    /**
+     * @return Enum\Breakdown[]
+     */
+    public function getBreakdowns(): array
+    {
+        return $this->breakdowns;
+    }
+
+    /**
+     * @return DatePreset
+     */
+    public function getDatePreset(): DatePreset
+    {
+        return $this->datePreset;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDefaultSummary(): bool
+    {
+        return $this->defaultSummary;
+    }
+
+    /**
+     * @return Enum\Field[]
+     */
+    public function getExportColumns(): array
+    {
+        return $this->exportColumns;
+    }
+
+    /**
+     * @return ExportFormat
+     */
+    public function getExportFormat(): ExportFormat
+    {
+        return $this->exportFormat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExportName(): string
+    {
+        return $this->exportName;
+    }
+
+    /**
+     * @return Enum\Field[]
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @return Request\Filter[]
+     */
+    public function getFiltering(): array
+    {
+        return $this->filtering;
+    }
+
+    /**
+     * @return Level
+     */
+    public function getLevel(): Level
+    {
+        return $this->level;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductIdLimit(): int
+    {
+        return $this->productIdLimit;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSort(): array
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @return Enum\Field[]
+     */
+    public function getSummary(): array
+    {
+        return $this->summary;
+    }
+
+    /**
+     * @return SummaryActionBreakdown[]
+     */
+    public function getSummaryActionBreakdowns(): array
+    {
+        return $this->summaryActionBreakdowns;
+    }
+
+    /**
+     * @return TimeIncrement
+     */
+    public function getTimeIncrement(): TimeIncrement
+    {
+        return $this->timeIncrement;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeIncrementDay(): int
+    {
+        return $this->timeIncrementDay;
+    }
+
+    /**
+     * @return Request\TimeRange[]
+     */
+    public function getTimeRanges(): array
+    {
+        return $this->timeRanges;
+    }
+
+    public function getAdReportRun(): AdReportRun
+    {
+        $request = new FacebookRequest(
+            $this->client->getFacebookApp(),
+            $this->client->getAccessToken(),
+            'GET',
+            "/act_{$this->accountId}/insights",
+            $this->getPostData()
+        );
+        $response = $this->client->getFacebookClient()->sendRequest($request);
+        return new AdReportRun($response->getDecodedBody()['report_run_id'], $this->client);
+
+    }
+
+    private function getPostData(): array
+    {
+        $postData = [];
+        $postData['date_preset'] = 'yesterday';
+        $postData['level'] = 'adset';
+        $postData['fields'] = "['adset_name' ,'adset_id', 'account_id', 'account_name', 'spend', 'clicks', 'impressions', 'reach', 'unique_clicks', 'unique_impressions']";
+        $postData['filtering'] = '[{"field":"adset.spent","operator":"GREATER_THAN","value":0}]';
+
+        return $postData;
     }
 }

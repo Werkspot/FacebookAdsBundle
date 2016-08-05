@@ -12,7 +12,7 @@
         bootstrap                   = "phpunit.bootstrap.php" >
     <testsuites>
         <testsuite name="unit">
-            <directory>./Tests/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
     <testsuites>
@@ -33,11 +33,11 @@
     </listeners>
     <filter>
         <blacklist>
-            <directory suffix=".php">./Api/Exceptions/</directory>
+            <directory suffix=".php">./tests/</directory>
+            <directory suffix=".php">./fake/</directory>
         </blacklist>
         <whitelist>
-            <directory suffix=".php">./Api/</directory>
-            <directory suffix=".php">./Model/</directory>
+            <directory suffix=".php">./src/</directory>
         </whitelist>
     </filter>
 </phpunit>

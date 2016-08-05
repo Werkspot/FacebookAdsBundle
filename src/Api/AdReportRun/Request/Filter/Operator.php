@@ -1,5 +1,5 @@
 <?php
-namespace Werkspot\FacebookAdsBundle\src\Api\AdReportRun\Request\Filter;
+namespace Werkspot\FacebookAdsBundle\Api\AdReportRun\Request\Filter;
 
 use Werkspot\Enum\AbstractEnum;
 
