@@ -1,15 +1,18 @@
 <?php
 namespace Werkspot\FacebookAdsBundle\Api;
 
-use Facebook\Facebook;
-use Facebook\FacebookApp;
-use Facebook\FacebookClient;
+use Werkspot\FacebookAdsBundle\FacebookProxy\FacebookApp;
+use Werkspot\FacebookAdsBundle\FacebookProxy\FacebookClient;
+use Werkspot\FacebookAdsBundle\FacebookProxy\Facebook;
+use Werkspot\FacebookAdsBundle\FacebookProxy\FacebookAppInterface;
+use Werkspot\FacebookAdsBundle\FacebookProxy\FacebookClientInterface;
+use Werkspot\FacebookAdsBundle\FacebookProxy\FacebookInterface;
 
-class Client
+class Client implements ClientInterface
 {
     const GRAPH_VERSION = 'v2.7';
 
-    /** @var int */
+    /** @var string */
     private $appId;
 
     /** @var string */
@@ -18,21 +21,21 @@ class Client
     /** @var string */
     private $accessToken;
 
-    public function __construct(int $appId, string $appSecret, string $accessToken)
+    public function __construct(string $appId, string $appSecret, string $accessToken)
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
         $this->accessToken = $accessToken;
     }
 
-    public function getFacebookApp(): FacebookApp
+    public function getFacebookApp(): FacebookAppInterface
     {
         return new FacebookApp($this->appId, $this->appSecret);
     }
 
-    private function getFacebook(): Facebook
+    private function getFacebook(): FacebookInterface
     {
-        new Facebook(
+        return new Facebook(
             [
                 'app_id' => $this->appId,
                 'app_secret' => $this->appSecret,
@@ -41,7 +44,7 @@ class Client
         );
     }
 
-    public function getFacebookClient(): FacebookClient
+    public function getFacebookClient(): FacebookClientInterface
     {
         return $this->getFacebook()->getClient();
     }

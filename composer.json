@@ -39,6 +39,13 @@
   "autoload": {
     "psr-4" : {
       "Werkspot\\FacebookAdsBundle\\": "src/"
+    },
+    "exclude-from-classmap": ["/fake/", "/tests/"]
+  },
+  "autoload-dev": {
+    "psr-4" : {
+      "WerkspotTest\\FacebookAdsBundle\\": "tests/",
+      "WerkspotFake\\FacebookAdsBundle\\": "fake/"
     }
   }
 }

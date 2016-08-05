@@ -3,8 +3,11 @@ namespace Werkspot\FacebookAdsBundle\Api;
 
 use DateTime;
 use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
+use Werkspot\FacebookAdsBundle\Api\AdReportRun\Result;
+use Werkspot\FacebookAdsBundle\Api\AdReportRun\ResultInterface;
 
-class AdReportRun
+class AdReportRun implements AdReportRunInterface
 {
     private $id;
     private $accountId;
@@ -15,7 +18,7 @@ class AdReportRun
     private $emails;
     private $friendlyName;
     private $isBookmarked;
-    private $isRunning;
+    private $isRunning = true;
     private $scheduleId;
     private $timeCompleted;
     private $timeRef;
@@ -28,29 +31,40 @@ class AdReportRun
         $this->fetchData();
     }
 
-    private function fetchData(): void
+    public function fetchData()
     {
-        $client =  $this->client;
+        $client = $this->client;
+        $request = new FacebookRequest($client->getFacebookApp(), $client->getAccessToken(), 'GET', "/{$this->id}/");
+        $this->parseData($client->getFacebookClient()->sendRequest($request));
+    }
 
-        $request = new FacebookRequest(
-            $client->getFacebookApp(),
-            $client->getAccessToken(),
-            'GET',
-            "/{$this->id}/"
-        );
-        $response = $client->getFacebookClient()->sendRequest($request);
-        foreach ($response as $key => $value) {
-            $key = $this->snakeToCamelCase($key);
+    public function fetchTillComplete(): ResultInterface
+    {
+        do {
+            $this->fetchData();
+            sleep(1);
+        } while ($this->asyncPercentCompletion!==100);
 
-            if (property_exists($this, $key)) {
-                $this->{$key} = $this->convertDateTime($key, $value);
-            }
+        return new Result($this);
+    }
+
+    public function getInsights(): ResultInterface
+    {
+        if ($this->asyncPercentCompletion!==100){
+            return $this->fetchTillComplete();
         }
+
+        return new Result($this);
     }
 
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getClient(): Client
+    {
+        return $this->client;
     }
 
     public function getAccountId(): string
@@ -88,17 +102,20 @@ class AdReportRun
         return $this->friendlyName;
     }
 
-    public function getIsBookmarked(): bool
+    public function isBookmarked(): bool
     {
         return $this->isBookmarked;
     }
 
-    public function getIsRunning(): bool
+    public function isRunning(): bool
     {
+        if ($this->asyncPercentCompletion == 100) {
+            return false;
+        }
         return $this->isRunning;
     }
 
-    public function getScheduleId(): bool
+    public function getScheduleId(): string
     {
         return $this->scheduleId;
     }
@@ -118,7 +135,7 @@ class AdReportRun
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $value))));
     }
 
-    private function convertDateTime(string $key, mixed $value)
+    private function convertDateTime(string $key, $value)
     {
         if (strpos($key, 'date') !== false) {
             return new DateTime($value);
@@ -129,5 +146,16 @@ class AdReportRun
         }
 
         return $value;
+    }
+
+    private function parseData(FacebookResponse $response)
+    {
+        foreach ($response->getDecodedBody() as $key => $value) {
+            $key = $this->snakeToCamelCase($key);
+
+            if (property_exists($this, $key)) {
+                $this->{$key} = $this->convertDateTime($key, $value);
+            }
+        }
     }
 }
