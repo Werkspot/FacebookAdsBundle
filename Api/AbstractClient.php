@@ -6,7 +6,7 @@ use FacebookAds\Api;
 
 abstract class AbstractClient
 {
-    const GRAPH_VERSION = 'v2.7';
+    const GRAPH_VERSION = 'v2.8';
 
     /**
      * @var int
